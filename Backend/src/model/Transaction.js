@@ -22,3 +22,5 @@ const TransactionSchema = new Schema({
   date: Date,
   Timestamp,
 });
+
+export const transaction = mongoose.model("transaction", TransactionSchema);
