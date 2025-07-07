@@ -1,6 +1,6 @@
 import { user } from "../model/user.js";
 
-const generateAccessAndRefreshToken = async (userId) => {
+export const generateAccessAndRefreshToken = async (userId) => {
   try {
     const User = await user.findById(userId);
     const accessToken = User.generateAccessToken();
@@ -15,7 +15,7 @@ const generateAccessAndRefreshToken = async (userId) => {
   }
 };
 
-const register = async (req, res) => {
+export const register = async (req, res) => {
   const { fullname, email, password } = req.body;
 
   try {
@@ -41,7 +41,7 @@ const register = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
