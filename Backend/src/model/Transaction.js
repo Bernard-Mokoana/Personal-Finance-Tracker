@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 const TransactionSchema = new Schema(
   {
     User: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "user",
       required: true,
     },
@@ -13,7 +13,7 @@ const TransactionSchema = new Schema(
       required: true,
     },
     category: {
-      type: Array[String],
+      type: String,
       required: true,
       trim: true,
     },

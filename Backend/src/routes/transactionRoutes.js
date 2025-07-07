@@ -3,7 +3,7 @@ import {
   getTransaction,
   updateTransaction,
   deleteTransaction,
-} from "../controllers/transactionController";
+} from "../controllers/transactionController.js";
 import express from "express";
 
 const router = express.Router();

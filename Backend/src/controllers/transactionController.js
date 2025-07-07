@@ -1,14 +1,15 @@
-import { transaction } from "../model/transaction";
+import { transaction } from "../model/transaction.js";
 
-export const createTransaction = async (res, req) => {
+export const createTransaction = async (req, res) => {
   const { type, category, amount, description, date } = req.body;
+  const userId = req.user._id;
 
   if (!type || !category || !amount)
     return res.status(400).json({ message: "Missing Fields" });
 
   try {
     const Transaction = await transaction.create({
-      User: req.User._id,
+      user: userId,
       type,
       category,
       amount,
@@ -16,15 +17,18 @@ export const createTransaction = async (res, req) => {
       date,
     });
 
-    res
+    return res
       .status(201)
       .json({ message: "Transaction created successfully" }, Transaction);
   } catch (error) {
-    res.status(500).json({ message: "Failed to create a transaction", error });
+    res.status(500).json({
+      message: "Failed to create a transaction",
+      error: error.message,
+    });
   }
 };
 
-export const getTransaction = async (res, req) => {
+export const getTransaction = async (req, res) => {
   try {
     const Transaction = await transaction.find({ user: req.user._id }).sort({
       date: -1,
@@ -40,7 +44,7 @@ export const getTransaction = async (res, req) => {
   }
 };
 
-export const updateTransaction = async (res, req) => {
+export const updateTransaction = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -63,7 +67,7 @@ export const updateTransaction = async (res, req) => {
   }
 };
 
-export const deleteTransaction = async (res, req) => {
+export const deleteTransaction = async (req, res) => {
   const { id } = req.params;
 
   try {
