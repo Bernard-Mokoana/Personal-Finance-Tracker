@@ -5,8 +5,11 @@ import {
   deleteTransaction,
 } from "../controllers/transactionController.js";
 import express from "express";
+import { verifyJwt } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+
+router.use(verifyJwt);
 
 router.post("/", createTransaction);
 router.get("/", getTransaction);
