@@ -2,7 +2,7 @@ import { transaction } from "../model/transaction.js";
 
 export const createTransaction = async (req, res) => {
   const { type, category, amount, description, date } = req.body;
-  const userId = req.user._id;
+  const userId = req.users._id;
 
   if (!type || !category || !amount)
     return res.status(400).json({ message: "Missing Fields" });
