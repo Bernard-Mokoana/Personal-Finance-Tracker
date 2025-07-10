@@ -4,8 +4,6 @@ export const createTransaction = async (req, res) => {
   const { type, category, amount, description, date } = req.body;
   const userId = req?.user?._id;
 
-  console.log("User Id required: ", userId);
-
   if (!type || !category || !amount)
     return res.status(400).json({ message: "Missing Fields" });
 
@@ -37,9 +35,10 @@ export const getTransaction = async (req, res) => {
       date: -1,
     });
 
-    res
-      .status(200)
-      .json({ message: "Transaction is fetched successfully" }, Transaction);
+    res.status(200).json({
+      message: "Transaction is fetched successfully",
+      transaction: Transaction,
+    });
   } catch (error) {
     res
       .status(500)
@@ -53,7 +52,7 @@ export const updateTransaction = async (req, res) => {
   try {
     const Transaction = await transaction.findOneAndUpdate(
       {
-        id: _id,
+        _id: id,
         user: req.user._id,
       },
       req.body,
@@ -75,7 +74,7 @@ export const deleteTransaction = async (req, res) => {
 
   try {
     const Transaction = await transaction.findOneAndDelete({
-      id: _id,
+      _id: id,
       user: req.user._id,
     });
 
@@ -84,7 +83,7 @@ export const deleteTransaction = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "Deleted successfully", error: error.message });
+      .json({ message: "Deleted successfully", transaction: Transaction });
   } catch (error) {
     res.status(500).json({ message: "Failed to delete", error: error.message });
   }
