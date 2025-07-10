@@ -88,3 +88,48 @@ export const deleteTransaction = async (req, res) => {
     res.status(500).json({ message: "Failed to delete", error: error.message });
   }
 };
+
+export const getSummary = async (req, res) => {
+  try {
+    const summary = await transaction.aggregate([
+      { $match: { user: req.user._id } },
+      {
+        $group: {
+          _id: {
+            type: "$type",
+            category: "$category",
+          },
+          totalAmount: { $sum: "$amount" },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id.type",
+          categories: {
+            $push: {
+              category: "$_id.category",
+              total: "$totalAmount",
+            },
+          },
+          total: { $sum: "$totalAmount" },
+        },
+      },
+    ]);
+
+    const formatted = {};
+    summary.forEach((item) => {
+      formatted[item._id] = {
+        total: item.total,
+        categories: item.categories,
+      };
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Summary fetched successfully", Formatted: formatted });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Failed to get summary", error: error.message });
+  }
+};
